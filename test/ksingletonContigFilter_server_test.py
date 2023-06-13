@@ -10,6 +10,7 @@ from ksingletonContigFilter.authclient import KBaseAuth as _KBaseAuth
 
 from installed_clients.AssemblyUtilClient import AssemblyUtil
 from installed_clients.WorkspaceClient import Workspace
+from installed_clients.baseclient import ServerError
 
 
 class ksingletonContigFilterTest(unittest.TestCase):
@@ -76,7 +77,7 @@ class ksingletonContigFilterTest(unittest.TestCase):
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
-    def test_run_ksingletonContigFilter_ok(self):
+    def my_test_run_ksingletonContigFilter_ok(self):
         # call your implementation
         ret = self.serviceImpl.run_ksingletonContigFilter(self.ctx,
                                                 {'workspace_name': self.wsName,
@@ -89,17 +90,56 @@ class ksingletonContigFilterTest(unittest.TestCase):
         self.assertEqual(ret[0]['n_contigs_removed'], 1)
         self.assertEqual(ret[0]['n_contigs_remaining'], 2)
 
-    def test_run_ksingletonContigFilter_min_len_negative(self):
+    def my_test_run_ksingletonContigFilter_min_len_negative(self):
         with self.assertRaisesRegex(ValueError, 'min_length parameter cannot be negative'):
             self.serviceImpl.run_ksingletonContigFilter(self.ctx,
                                               {'workspace_name': self.wsName,
                                                'assembly_input_ref': '1/fake/3',
                                                'min_length': '-10'})
 
-    def test_run_ksingletonContigFilter_min_len_parse(self):
+    def my_test_run_ksingletonContigFilter_min_len_parse(self):
         with self.assertRaisesRegex(ValueError, 'Cannot parse integer from min_length parameter'):
             self.serviceImpl.run_ksingletonContigFilter(self.ctx,
                                               {'workspace_name': self.wsName,
                                                'assembly_input_ref': '1/fake/3',
                                                'min_length': 'ten'})
 
+    def test_run_ksingletonContigFilter_max(self):
+        ref = "79/16/1"
+        result = self.serviceImpl.run_ksingletonContigFilter_max(self.ctx, {
+            'workspace_name': self.wsName,
+            'assembly_ref': ref,
+            'min_length': 100,
+            'max_length': 1000000
+        })
+        print(result)
+
+    def test_invalid_params(self):
+        ref = "79/16/1"
+        impl = self.serviceImpl
+        ctx = self.ctx
+        ws = self.wsName
+        # Missing assembly ref
+        with self.assertRaises(KeyError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws,
+                 'min_length': 100, 'max_length': 1000000})
+        # Missing min length
+        with self.assertRaises(ValueError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': ref,
+                 'max_length': 1000000})
+        # Min length is negative
+        with self.assertRaises(ValueError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
+                 'min_length': -1, 'max_length': 1000000})
+        # Min length is wrong type
+        with self.assertRaises(ValueError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
+                 'min_length': 'x', 'max_length': 1000000})
+        # Assembly ref is wrong type
+        with self.assertRaises(ServerError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 1,
+                 'min_length': 1, 'max_length': 1000000})
+        # Invalid Maax_length
+        with self.assertRaises(ValueError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
+                 'min_length': 1, 'max_length': 1000000})

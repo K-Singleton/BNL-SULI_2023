@@ -16,30 +16,30 @@ class ksingletonContigFilter:
     '''
     Module Name:
     ksingletonContigFilter
+
     Module Description:
-    
+    A KBase module: ksingletonContigFilter
+This sample module contains one small method that filters contigs.
     '''
-    
-    ######## WARNING FOR GEVENT USERS #######
+
+    ######## WARNING FOR GEVENT USERS ####### noqa
     # Since asynchronous IO can lead to methods - even the same method -
     # interrupting each other, you must be *very* careful when using global
     # state. A method could easily clobber the state set by another while
     # the latter method is running.
-    #########################################
-
+    ######################################### noqa
     VERSION = "0.0.1"
-    GIT_URL = ""
-    GIT_COMMIT_HASH = ""
-    
+    GIT_URL = "git@github.com:K-Singleton/ksingletonContigFilter.git"
+    GIT_COMMIT_HASH = "d3bc76d4880cfe20ffd67d72975797eee9e7de3e"
+
     #BEGIN_CLASS_HEADER
     # Class variables and functions can be defined in this block
     #END_CLASS_HEADER
-    
+
     # config contains contents of config file in a hash or None if it couldn't
     # be found
     def __init__(self, config):
         #BEGIN_CONSTRUCTOR
-        
         # Any configuration parameters that are important should be parsed and
         # saved in the constructor.
         self.callback_url = os.environ['SDK_CALLBACK_URL']
@@ -49,9 +49,16 @@ class ksingletonContigFilter:
         #END_CONSTRUCTOR
         pass
 
+
     def run_ksingletonContigFilter(self, ctx, params):
+        """
+        This example function accepts any number of parameters and returns results in a KBaseReport
+        :param params: instance of mapping from String to unspecified object
+        :returns: instance of type "ReportResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
         # ctx is the context object
-        # return variables are: returnVal
+        # return variables are: output
         #BEGIN run_ksingletonContigFilter
 
         # Print statements to stdout/stderr are captured and available as the App log
@@ -133,7 +140,6 @@ class ksingletonContigFilter:
         logging.info('returning:' + pformat(output))
                 
         #END run_ksingletonContigFilter
-        
 
         # At some point might do deeper type checking...
         if not isinstance(output, dict):
@@ -142,6 +148,61 @@ class ksingletonContigFilter:
         # return the results
         return [output]
 
+    def run_ksingletonContigFilter_max(self, ctx, params):
+        """
+        New app which filters contigs in an assembly using both a minimum and a maximum contig length
+        :param params: instance of mapping from String to unspecified object
+        :returns: instance of type "ReportResults" -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String
+        """
+        # ctx is the context object
+        # return variables are: output
+        #BEGIN run_ksingletonContigFilter_max
+        assembly_util = AssemblyUtil(self.callback_url)
+        fasta_file = assembly_util.get_assembly_as_fasta({'ref': params['assembly_ref']})
+        print(fasta_file)
+        # Parse the downloaded file in FASTA format
+        parsed_assembly = SeqIO.parse(fasta_file['path'], 'fasta')
+        min_length = params['min_length']
+        max_length = params['max_length']
+        
+
+        #Keep a list of contigs greater than min_length
+        good_contigs = []
+        # total contigs regardless of length
+        n_total = 0
+        # total contigs over the min_length
+        n_remaining = 0
+        for record in parsed_assembly:
+            n_total += 1
+            if len(record.seq) >= min_length and len(record.seq) <= max_length:
+                good_contigs.append(record)
+                n_remaining += 1
+        output = {
+            'n_total': n_total,
+            'n_remaining': n_remaining
+        }
+
+        for name in ['min_length', 'max_length', 'assembly_ref', 'workspace_name']:
+            if name not in params:
+                raise ValueError('Parameter "' + name + '" is required but missing')
+        if not isinstance(params['min_length'], int) or (params['min_length'] < 0):
+            raise ValueError('Min length must be a non-negative integer')
+        if not isinstance(params['max_length'], int) or (params['max_length'] < 0):
+            raise ValueError('Max length must be a non-negative integer')
+        if not isinstance(params['assembly_ref'], str) or not len(params['assembly_ref']):
+            raise ValueError('Pass in a valid assembly reference string')
+        print(params['min_length'], params['max_length'], params['assembly_ref'])
+        output = {}
+       
+        #END run_ksingletonContigFilter_max
+
+        # At some point might do deeper type checking...
+        if not isinstance(output, dict):
+            raise ValueError('Method run_ksingletonContigFilter_max return value ' +
+                             'output is not type dict as required.')
+        # return the results
+        return [output]
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
