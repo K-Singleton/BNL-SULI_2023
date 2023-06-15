@@ -44,8 +44,8 @@ This sample module contains one small method that filters contigs.
         # saved in the constructor.
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
-        logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
-                            level=logging.INFO)
+        #logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
+        #                    level=logging.INFO)
         #END_CONSTRUCTOR
         pass
 
@@ -185,13 +185,13 @@ This sample module contains one small method that filters contigs.
 
         for name in ['min_length', 'max_length', 'assembly_ref', 'workspace_name']:
             if name not in params:
-                raise ValueError('Parameter "' + name + '" is required but missing')
+                raise KeyError('Parameter "' + name + '" is required but missing')
         if not isinstance(params['min_length'], int) or (params['min_length'] < 0):
             raise ValueError('Min length must be a non-negative integer')
         if not isinstance(params['max_length'], int) or (params['max_length'] < 0):
             raise ValueError('Max length must be a non-negative integer')
         if not isinstance(params['assembly_ref'], str) or not len(params['assembly_ref']):
-            raise ValueError('Pass in a valid assembly reference string')
+            raise KeyError('Pass in a valid assembly reference string')
         print(params['min_length'], params['max_length'], params['assembly_ref'])
         output = {}
        

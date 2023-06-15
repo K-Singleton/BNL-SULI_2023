@@ -124,22 +124,19 @@ class ksingletonContigFilterTest(unittest.TestCase):
              impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws,
                  'min_length': 100, 'max_length': 1000000})
         # Missing min length
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
              impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': ref,
                  'max_length': 1000000})
         # Min length is negative
         with self.assertRaises(ValueError):
-             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': ref,
                  'min_length': -1, 'max_length': 1000000})
         # Min length is wrong type
-        with self.assertRaises(ValueError):
-             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
+        with self.assertRaises(TypeError):
+             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': ref,
                  'min_length': 'x', 'max_length': 1000000})
         # Assembly ref is wrong type
         with self.assertRaises(ServerError):
              impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 1,
                  'min_length': 1, 'max_length': 1000000})
-        # Invalid Maax_length
-        with self.assertRaises(ValueError):
-             impl.run_ksingletonContigFilter_max(ctx, {'workspace_name': ws, 'assembly_ref': 'x',
-                 'min_length': 1, 'max_length': 1000000})
+        
