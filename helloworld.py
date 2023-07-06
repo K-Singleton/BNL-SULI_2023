@@ -12,13 +12,13 @@ def echo():
     return request_body
 
 
-@app.route('/proxy')
-def proxy():
-    r = requests.get('https://pokeapi.co/api/v2/pokemon/eevee',auth=('user','pass'))
+@app.route('/proxy/<pokemon>')
+def proxy(pokemon):
+    r = requests.get(f'https://pokeapi.co/api/v2/pokemon/{pokemon}',auth=('user','pass'))
     print(r.status_code)
     print(r.headers['content-type'])
 
-    return f'{r.status_code}'
+    return r.json()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
