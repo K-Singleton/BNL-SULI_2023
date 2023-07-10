@@ -5,5 +5,7 @@ This server is using Flask. Flask is a Python module used for web applications.A
 ```python3 -m venv .server_name```  
 ```source .server_name/bin/activate```  
 
-2. 
-3. To start server enter: ```python helloworld.py```
+2. To install packages such as flask & requests:        
+```pip install "package"```
+3. To start server enter:   
+```python helloworld.py```
