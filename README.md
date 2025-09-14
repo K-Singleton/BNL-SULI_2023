@@ -1,4 +1,4 @@
-# Monorepo Name
+# Science Undergraduate Laboratory Internship(SULI) @ Brookhaven National Laboratory(BNL) - Aug 2023
 
 This is a monorepo containing multiple related repositories/subprojects focused on [overall project topic or goal].  
 These projects were completed during an internship at [Company Name].
@@ -10,45 +10,29 @@ These projects were completed during an internship at [Company Name].
 - Pandas, NumPy, Matplotlib, Seaborn, Plotly  
 - Git / GitHub  
 
-## Repositories / Subprojects
+## Subrepositories / Subprojects
 
 ### 1. Subproject Name 1
 
 - **Description:** Brief explanation of what this subproject does.  
-- **Key Features / Contents:**  
-  - Feature 1  
-  - Feature 2  
-- **Resources / References:**  
-  - [Dataset / Link]  
-  - [API / Documentation / Link]  
 - **Location in Monorepo:** `/subproject1`  
 
 ### 2. Subproject Name 2
 
 - **Description:** Brief explanation of what this subproject does.  
-- **Key Features / Contents:**  
-  - Feature 1  
-  - Feature 2  
-- **Resources / References:**  
-  - [Dataset / Link]  
-  - [Tutorial / Documentation / Link]  
 - **Location in Monorepo:** `/subproject2`  
 
 ### 3. Subproject Name 3
 
 - **Description:** Brief explanation of what this subproject does.  
-- **Key Features / Contents:**  
-  - Feature 1  
-  - Feature 2  
-- **Resources / References:**  
-  - [Dataset / Link]  
-  - [API / Documentation / Link]  
 - **Location in Monorepo:** `/subproject3`  
+
+> For more details on each subproject, see its individual README.
 
 ## Usage / How to Explore
 
-- Each subproject can be explored individually in its folder.  
-- Optionally, you can clone the monorepo to access all subprojects at once.
+- Clone the monorepo to access all subprojects.  
+- Explore each subproject folder for code, data, and detailed instructions.
 
 ## Mentorship / Acknowledgements
 
@@ -58,4 +42,5 @@ These projects were completed during an internship at [Company Name].
 ## Author / Contact
 
 - Your Name  
+- Optional: email or other contact info
 - Optional: email or other contact info
