@@ -1,0 +1,3 @@
+[submodule "SULI_Notes"]
+	path = SULI_Notes
+	url = git@github.com:K-Singleton/SULI_Notes.git
